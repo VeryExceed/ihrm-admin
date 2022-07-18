@@ -18,7 +18,7 @@ service.interceptors.request.use(async config => {
     // 只要有token 就要检查token时效性
     if (CheckIsTimeOut()) {
       //  继续？
-      await store.dispatch('user/lgout')
+      await store.dispatch('user/logout')
       router.push('/login') // 跳到登录
       return Promise.reject(new Error('您的token已经失效'))
     }
@@ -49,7 +49,7 @@ service.interceptors.response.use(response => {
   // error 有response对象 config
   if (error.response && error.response.data && error.response.data.code === 10002) {
     // 后端告诉前端token超时了
-    await store.dispatch('user/lgout') // 调用登出action
+    await store.dispatch('user/logout') // 调用登出action
     router.push('/login') // 跳到登录页
   }
   // 失败
