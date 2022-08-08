@@ -120,13 +120,15 @@ export function param2Obj(url) {
  *
  * 将列表型数据转化成树形数据 => 递归算法 => 自身调用自身 => 条件不能相同，否则死循环
  * 遍历树形结构 要先找到一个点
+ * transListToTreeData
+ * transListToTreeData
  * ***/
-export function tranListToTreeData(list, rootValue) {
+export function transListToTreeData(list, rootValue) {
   var arr = []
   list.forEach(item => {
     if (item.pid === rootValue) {
       // 找到之后 就要去找item 下面有没有子节点
-      const children = tranListToTreeData(list, item.id)
+      const children = transListToTreeData(list, item.id)
       if (children.length) {
         // 如果children长度大于0 说明找到了子节点
         item.children = children

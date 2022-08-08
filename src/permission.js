@@ -19,9 +19,19 @@ router.beforeEach(async(to, from, next) => {
         // 如果id 不存在 意味着当前没有用户资料 就要去获取用户资料
         // vuex的action 是一个promise
         // 写await 获取完资料再放行
-        await store.dispatch('user/getUserInfo')
+        const { roles } = await store.dispatch('user/getUserInfo')
+        // 如果说后续 需要根据用户资料获取数据的话 这里必须改成同步
+
+        // actions中函数 默认是Promise对象 调用这个对象 想要获取返回的值话 必须 加 await或者是then
+        const routes = await store.dispatch('permission/filterRoutes', roles.menus)
+        // routes就是帅选得到的动态路由
+        // 动态路由 添加到 路由表中 默认的路由表 只有静态路由 没有动态路由
+        // addRoutes  必须 用 next(地址) 不能用next()
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }]) // 添加到动态路由表
+        next(to.path)
+      } else {
+        next() // 放行
       }
-      next() // 放行
     }
   } else {
     // 如果没有token
@@ -37,5 +47,5 @@ router.beforeEach(async(to, from, next) => {
 
 // 后置守卫
 router.afterEach(() => {
-  NProgress.done()
+  NProgress.done() // 关闭进度条
 })

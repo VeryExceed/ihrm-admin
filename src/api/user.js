@@ -23,7 +23,7 @@ export function getUserInfo() {
  *  为了完全显示头像
  *
  * **/
-export function getUserDetailByid(id) {
+export function getUserDetailById(id) {
   return request({
     url: `/sys/user/${id}`
   })

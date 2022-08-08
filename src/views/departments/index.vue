@@ -33,7 +33,7 @@
 import TreeTools from './components/tree-tools.vue'
 import AddDept from './components/add-dept.vue'
 import { getDepartments } from '@/api/departments'
-import { tranListToTreeData } from '@/utils'
+import { transListToTreeData } from '@/utils'
 export default {
   components: {
     TreeTools,
@@ -70,7 +70,7 @@ export default {
       const result = await getDepartments()
       console.log(result)
       this.company = { name: result.companyName, manager: '负责人', id: '' }
-      this.departs = tranListToTreeData(result.depts, '') // 需要将其转化成树形结构
+      this.departs = transListToTreeData(result.depts, '') // 需要将其转化成树形结构
     },
 
     addDepts(node) {

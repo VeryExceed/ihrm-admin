@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
-import { login, getUserInfo, getUserDetailByid } from '@/api/user'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
+import { resetRouter } from '@/router'
 
 // 状态
 const state = {
@@ -44,7 +45,7 @@ const actions = {
   // 获取用户资料action
   async getUserInfo(context) {
     const result = await getUserInfo() // result就是用户的的基本资料
-    const baseInfo = await getUserDetailByid(result.userId) // 为了获取头像
+    const baseInfo = await getUserDetailById(result.userId) // 为了获取头像
     context.commit('setUserInfo', { ...result, ...baseInfo }) // 将整个的个人信息设置到用户的vuex数据中
     return result
   },
@@ -54,6 +55,14 @@ const actions = {
     context.commit('removeToken') // 删除vuex中的 删除缓存的token
     // 删除用户资料
     context.commit('removeUserInfo') // 删除用户信息
+    // 重置路由
+    resetRouter()
+    // vuex的数据还在
+    // 要清空permission模块下的state数据
+    // 子模块调用子模块的action  默认情况下 子模块的context是子模块的
+    // 父模块 调用 子模块的action
+    // 子模块调用子模块的action 可以 将 commit的第三个参数 设置成  { root: true } 就表示当前的context不是子模块了 而是父模块
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 
